@@ -1,0 +1,102 @@
+<html>
+    <head>
+      <!--
+        http://leafletjs.com/reference.html
+        -->
+
+        <title>
+          A simple map.
+        </title>
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Signika+Negative:400,600' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="map.css" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    	<link rel="stylesheet" href="L.Control.Sidebar.css" />
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+        <![endif]-->
+        <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+        <script src="L.Control.Sidebar.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.1.0/tabletop.min.js"></script>
+    </head>
+    <body>
+      	<div id="sidebar">
+      		<h1 id="legend">Our Ranking System:</h1>
+      		<h3 class="awesome">10 - Poseidon's tears</h3>
+      		<h3 class="awesome">9 - Holy water</h3>
+      		<h3 class="good">8 - Imported</h3>
+      		<h3 class="good">7 - The Pure Michigan commercials in liquid form</h3>
+      		<h3 class="ok">6 - Meh</h3>
+      		<h3 class="ok">5 - Lake Michigan</h3>
+      		<h3 class="notgood">4 - Lakefill water (slight taste of mutant fish)</h3>
+      		<h3 class="notgood">3 - Beer pong water cup</h3>
+      		<h3 class="shitty">2 - The permanent puddle next to Sheil</h3>
+      		<h3 class="shitty">1 - Frances Willard's backwash</h3>
+      	</div>
+
+    	<div id='map'></div>
+    
+    <script type="text/javascript" charset="utf-8">
+
+    SPREADSHEET_KEY = '0AlMgrVuuAI0MdHNhYXFFcTlrR0d5TWU5dm9aMXNkdWc';
+        var map = L.map('map', {
+        	center: [42.894294, -87.673755],
+            zoom: 16,
+            zoomControl: false
+        });
+
+        //var zoom = L.control.zoom('position', 'bottomright');
+        //map.addControl(zoom);
+
+        //var map = L.map('map').setView([42.894294, -87.673755], 16);
+
+      function addFountains(data, tabletop) {
+        window.data = data;
+        var template = _.template($("#fountain-template").html())
+        for (var i = 0; i < data.length; i++) {
+          var point = data[i];
+          var blurb = data[i];
+          var temperature = data[i];
+          var taste = data[i];
+          var stream = data[i];
+          if (point.lat && point.long) {
+            L.marker([point.lat, point.long]).bindPopup(template(point, blurb, temperature, taste, stream)).addTo(map);
+            map.panTo([point.lat, point.long]);
+          }
+        }
+      }
+
+      var sidebar = L.control.sidebar('sidebar', {
+            closeButton: false,
+            position: 'left'
+        });
+        map.addControl(sidebar);
+
+        setTimeout(function () {
+            sidebar.show();
+        }, 800);
+
+        // replace "toner" here with "terrain" or "watercolor"
+        // var layer = new L.StamenTileLayer("watercolor");
+        // map.addLayer(layer);
+        L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        Tabletop.init( { key: SPREADSHEET_KEY,
+                         callback: addFountains,
+                         simpleSheet: true } )
+        
+    </script>
+    <script id="fountain-template" type="text/template">
+      <h1><%= fountain %></h1>
+      <p><%= description %></p>
+      <h3><b>Temperature: </b><%= temperature %></h3>
+      <h3><b>Taste: </b><%= taste %></h3>
+      <h3><b>Stream: </b><%= stream %></h3>
+    </script>
+    </body>
+</html>
+

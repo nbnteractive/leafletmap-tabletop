@@ -1,0 +1,46 @@
+#map {
+    width: 960px;
+    height: 700px;
+}
+
+#sidebar {
+    width: 410px;
+    height: 500px;
+}
+
+#legend {
+	color: #4876FF;
+}
+
+p {
+	font-family: 'Helvetica', sans-serif;
+	font-size: 13px;
+}
+
+h1 {
+	font-family: 'Bitter', sans-serif;
+}
+
+h3 {
+	font-family: 'Helvetica', sans-serif;
+}
+
+.shitty {
+	color: #9D0019;
+}
+
+.awesome {
+	color: #1437AD;
+}
+
+.good {
+	color: #4811AE;
+}
+
+.ok {
+	color: #8506A9;
+}
+
+.notgood {
+	color: #D9005B;
+}
